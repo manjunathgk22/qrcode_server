@@ -1,17 +1,18 @@
 const User = require('../models/User');
-const Test = require('../models/Test');
 const authService = require('../services/auth.service');
 const bcryptService = require('../services/bcrypt.service');
 
 const UserController = () => {
   const register = async (req, res) => {
     const { body } = req;
-
+    console.log("qqqqq", body);
+    
     if (body.password === body.password2) {
       try {
         const user = await User.create({
           email: body.email,
           password: body.password,
+          restaurant_id: body.restaurant_id,
         });
         const token = authService().issue({ id: user.id });
 

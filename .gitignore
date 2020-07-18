@@ -65,3 +65,5 @@ typings/
 
 # sqlite database
 db/database.sqlite
+
+uploads/

@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
 const bcryptService = require('../services/bcrypt.service');
-
+const Restaurants = require('../models/Restaurant');
 const sequelize = require('../../config/database');
 
 const hooks = {
@@ -29,5 +29,7 @@ User.prototype.toJSON = function () {
 
   return values;
 };
+User.belongsTo(Restaurants, { foreignKey: {name: 'restaurant_id', allowNull:false}, foreignKeyConstraint: true });
 
+// User.belongsTo(Restaurants);
 module.exports = User;

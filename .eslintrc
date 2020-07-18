@@ -1,15 +1,24 @@
 {
-    "extends": "airbnb-base",
-    "plugins": [
-        "import"
-    ],
-    "rules": {
-        "arrow-parens": [
-            "error",
-            "always"
-        ]
-    },
-    "env": {
-        "jest": true
-    }
+    // "extends": "airbnb-base",
+    // "plugins": [
+    //     "import"
+    // ],
+    // "rules": {
+    //     "arrow-parens": [
+    //         "error",
+    //         "always"
+    //     ]
+    // },
+    // "env": {
+    //     "jest": true
+    // }
+    // {
+        "parserOptions": {
+            "ecmaVersion": 2017
+        },
+    
+        "env": {
+            "es6": true
+        }
+    // }
 }
