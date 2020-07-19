@@ -7,21 +7,22 @@ const UploadController = () => {
     const staticUpload = async (req, res, next)=>{
 
         try {
-            const menuitem = await MenuItem
-        .findOne({
-            where: {
-            id:1,
-            },
-        });
-        if(!menuitem){
-            res.status(500).json({ msg: 'Internal server error: menuitem not found' });
-        }
-        const images = [...menuitem.dataValues.images, req.file.filename]
+        //     const menuitem = await MenuItem
+        // .findOne({
+        //     where: {
+        //     id:1,
+        //     },
+        // });
+        // if(!menuitem){
+        //     res.status(500).json({ msg: 'Internal server error: menuitem not found' });
+        // }
+        // const images = [...menuitem.dataValues.images, req.file.filename]
 
-        response = await menuitem.update({
-            images
-        })
-        return res.status(200).json({data:response.dataValues})
+        // response = await menuitem.update({
+        //     images
+        // })
+        // return res.status(200).json({data:response.dataValues})
+        return res.status(200).json({filename:req.file.filename})
         } catch (error) {
             res.send(500)
         }

@@ -10,6 +10,7 @@ const RestaurantController = () => {
         name: body.name,
         address: body.address,
         gstid: body.gstid,
+        images : body.images || ['']
       });
 
       return res.status(200).json({ response });
@@ -18,6 +19,25 @@ const RestaurantController = () => {
       return res.status(500).json({ msg: 'Internal server error' });
     }
   };
+
+  const update = async (req, res)=>{
+    try {
+        const id = req.body.id;
+        const restaurant = await Restaurant
+        .findOne({
+            where: {
+            id,
+            },
+        });
+        let obj = {...restaurant, ...req.body}
+        obj.images = [...restaurant.images, ...req.body.images||[]]
+        restaurant.update({
+          ...obj
+        })
+    } catch (error) {
+      return res.status(500).json({msg:'Internal server error'})
+    }
+  }
 
   const getAll = async (req, res) => {
     try {
@@ -34,6 +54,7 @@ const RestaurantController = () => {
   return {
     register,
     getAll,
+    update
   };
 };
 

@@ -16,6 +16,10 @@ const restaurant = sequelize.define('restaurant', {
   address: {
     type: Sequelize.STRING,
   },
+  images: {
+    type: Sequelize.ARRAY(Sequelize.STRING),
+    defaultValue: []
+  },
   gstid: {
     type: Sequelize.STRING,
     unique: true,

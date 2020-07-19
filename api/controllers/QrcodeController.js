@@ -47,9 +47,14 @@ const QrcodeController = () => {
         }
     };
 
+    const getMenus = (req, res)=>{
+        
+    }
+
     return {
         create,
         getAll,
+        getMenus
     };
 };
 

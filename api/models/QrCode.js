@@ -20,6 +20,10 @@ const qrcode = sequelize.define('qrcode', {
     },
     status:{
       type:Sequelize.BOOLEAN,
+      defaultValue: true
+    },
+    occupied: {
+      type:Sequelize.BOOLEAN,
       defaultValue: false
     }
 }, { hooks, tableName });

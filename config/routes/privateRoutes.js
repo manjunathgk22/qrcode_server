@@ -7,7 +7,7 @@ var storage = multer.diskStorage({
     cb(null, path.join(process.cwd(), '/uploads'))
   },
   filename: function (req, file, cb) {
-    cb(null, file.originalname +  Date.now() + path.extname(file.originalname))
+    cb(null, file.originalname.replace(/-/g, '') +  Date.now() + path.extname(file.originalname))
   }
 })
  
@@ -26,7 +26,10 @@ const privateRoutes = {
   'POST /uploadStatic' : {
     path: 'UploadController.staticUpload',
     middlewares : [upload.single('file')]
-  }
+  },
+  'POST /order/create' : 'OrderController.create',
+  'GET /order/getorders': 'OrderController.getAll',
+  'POST /bill/create' : 'BillController.create',
 };
 
 module.exports = privateRoutes;

@@ -18,7 +18,7 @@ const MenuItemController = () => {
         // });
 
         if(!body.name || !body.cost || !body.menu_category_id) {
-            return res.status(400).json({ msg: 'Bad Request: qrcode id not found' });
+            return res.status(400).json({ msg: 'Bad Request: name or cost or category id not found' });
         }
         
         try {
@@ -46,9 +46,29 @@ const MenuItemController = () => {
         }
     };
 
+    const update = async (req, res)=>{
+        try {
+            const id = req.body.id;
+            const menuitem = await menuItem
+            .findOne({
+                where: {
+                id,
+                },
+            });
+            let obj = {...menuitem, ...req.body}
+            obj.images = [...menuitem.images, ...req.body.images||[]]
+            menuitem.update({
+              ...obj
+            })
+        } catch (error) {
+          return res.status(500).json({msg:'Internal server error'})
+        }
+      }
+
     return {
         create,
         getAll,
+        update
     };
 };
 

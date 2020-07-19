@@ -30,6 +30,6 @@ User.prototype.toJSON = function () {
   return values;
 };
 User.belongsTo(Restaurants, { foreignKey: {name: 'restaurant_id', allowNull:false}, foreignKeyConstraint: true });
-
+// Restaurants.hasOne(User, { foreignKey : {name: 'id'}})
 // User.belongsTo(Restaurants);
 module.exports = User;
