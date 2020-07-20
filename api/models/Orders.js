@@ -34,7 +34,8 @@ const order = sequelize.define('order', {
 order.belongsTo(menuItem, { foreignKey: {name: 'menu_item_id', allowNull:false}, foreignKeyConstraint: true });
 order.belongsTo(Qrcode, { foreignKey: {name: 'qrcode_id', allowNull:false}, foreignKeyConstraint: true });
 
-
+menuItem.hasOne(order)
+Qrcode.hasMany(order)
 // eslint-disable-next-line
 order.prototype.toJSON = function () {
   const values = Object.assign({}, this.get());

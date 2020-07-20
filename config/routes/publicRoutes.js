@@ -4,6 +4,7 @@ const publicRoutes = {
   'POST /login': 'UserController.login',
   'POST /validate': 'UserController.validate',
   'POST /registerHotel': 'RestaurantController.register',
+  'GET /getdetails' : 'QrcodeController.getDetails'
 };
 
 module.exports = publicRoutes;

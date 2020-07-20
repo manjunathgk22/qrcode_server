@@ -6,6 +6,11 @@ const ORDER_STATUS = {
     billed: 'BILLED'
 }
 
+const QRCODE_TYPE = {
+    table: 'TABLE',
+    room: 'ROOM'
+}
+
 module.exports= {
     ORDER_STATUS
 }

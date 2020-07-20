@@ -2,11 +2,24 @@ const User = require('../models/User')
 const Qrcode = require("../models/QrCode");
 const  QRCode = require('qrcode')
 const { v4: uuidv4 } = require('uuid');
+const menuItem = require('../models/MenuItem');
+const menuCategory = require('../models/MenuCategory');
+const ServiceItem = require('../models/ServiceItem');
+const ServiceCategory = require('../models/ServiceCategory')
+const menu = require('../models/Menu');
+const Service = require('../models/Service')
+const Sequelize = require('sequelize');
+const service = require('../models/Service');
+const Op = Sequelize.Op;
 
 const QrcodeController = () => {
     const create = async (req, res) => {
         const { body } = req;
         console.log(body);
+
+        if(!body.name){
+            return res.status(400).json({msg: 'Bad Request name not present'})
+        }
 
         const userId = req.token && req.token.id;
         const user = await User
@@ -23,6 +36,7 @@ const QrcodeController = () => {
         try {
             const response = await Qrcode.create({
                 code: uuidv4(),
+                name:body.name,
                 restaurant_id: user.restaurant_id,
                 canonicalname: body.canonicalname
             });
@@ -31,7 +45,7 @@ const QrcodeController = () => {
             return res.status(200).json({ response });
         } catch (err) {
             console.log(err);
-            return res.status(500).json({ msg: "Internal server error" });
+            return res.status(500).json({ msg: "Internal server error " + (err.original? err.original.detail: '') });
         }
     };
 
@@ -47,14 +61,106 @@ const QrcodeController = () => {
         }
     };
 
-    const getMenus = (req, res)=>{
+    const getMenus = async (req, res)=>{
+        if(!req.body.id){
+            return res.status(400).json({msg: "qrcode id not found"})
+        }
+        
+        try {
+            const {id} = await  menu.findOne({
+                where:{qrcode_id: req.body.id}
+            })
+            // const response = await menuItem.findAll({
+            //     include:[{
+            //         model: menuCategory,
+            //         required:true,
+            //         include: [
+            //             {model:menu,
+            //             resquired:true,
+            //             where: {id}
+            //             }
+            //         ]  
+            //     }]
+            // })
+
+            const response = await menuCategory.findAll({
+                where : {menu_id: id},
+                include:[{
+                    model: menuItem,
+                    required:false,
+                    on:{
+                        menu_category_id: { [Op.eq]: Sequelize.col('menucategory.id') }
+                        
+                    }
+                }]
+            })
+
+            const data = response.map(row => row.dataValues)
+            console.log({response})
+            console.log(response.length)
+            return res.status(200).json({response: data})
+        } catch (error) {
+            console.log(error)
+            return res.status(400).json({response: 'Internal Server error'})
+        }
+        
+    }
+    const getDetails = async (req, res)=>{
+        if(!req.body.id){
+            return res.status(400).json({msg: "qrcode id not found"})
+        }
+        
+        try {
+            const {id} = await  menu.findOne({
+                where:{qrcode_id: req.body.id}
+            })
+
+            const {id:serviceId} = await  service.findOne({
+                where:{qrcode_id: req.body.id}
+            })
+            
+            
+            const serviceObj = await ServiceCategory.findAll({
+                where : {service_id: serviceId},
+                include:[{
+                    model: ServiceItem,
+                    required:false,
+                    on:{
+                        service_category_id: { [Op.eq]: Sequelize.col('servicecategory.id') }
+                        
+                    }
+                }]
+            })
+
+            const response = await menuCategory.findAll({
+                where : {menu_id: id},
+                include:[{
+                    model: menuItem,
+                    required:false,
+                    on:{
+                        menu_category_id: { [Op.eq]: Sequelize.col('menucategory.id') }
+                        
+                    }
+                }]
+            })
+
+            const menus = response.map(row => row.dataValues)
+            const services = serviceObj.map(row => row.dataValues)
+            console.log({response})
+            console.log(response.length)
+            return res.status(200).json({response: {menus, services}})
+        } catch (error) {
+            console.log(error)
+            return res.status(400).json({response: 'Internal Server error'})
+        }
         
     }
 
     return {
         create,
         getAll,
-        getMenus
+        getMenus,
+        getDetails
     };
 };
 

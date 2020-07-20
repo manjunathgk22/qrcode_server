@@ -1,7 +1,7 @@
 
 const Sequelize = require('sequelize');
 const sequelize = require('../../config/database');
-const menuCategory = require('./MenuCategory');
+const serviceCategory = require('./ServiceCategory');
 
 const hooks = {
   beforeCreate() {
@@ -9,8 +9,8 @@ const hooks = {
   },
 };
 
-const tableName = 'menuitems';
-const menuItem = sequelize.define('menuitem', {
+const tableName = 'serviceitems';
+const serviceItem = sequelize.define('serviceitem', {
     status:{
         type:Sequelize.BOOLEAN,
         defaultValue: true
@@ -32,15 +32,15 @@ const menuItem = sequelize.define('menuitem', {
 }, { hooks, tableName });
 
 
-menuItem.belongsTo(menuCategory, { foreignKey: {name: 'menu_category_id', allowNull:false}, foreignKeyConstraint: true });
+serviceItem.belongsTo(serviceCategory, { foreignKey: {name: 'service_category_id', allowNull:false}, foreignKeyConstraint: true });
 
-menuCategory.hasMany(menuItem)
+serviceCategory.hasMany(serviceItem)
 
 
 // eslint-disable-next-line
-menuItem.prototype.toJSON = function () {
+serviceItem.prototype.toJSON = function () {
   const values = Object.assign({}, this.get());
   return values;
 };
 
-module.exports = menuItem;
+module.exports = serviceItem;

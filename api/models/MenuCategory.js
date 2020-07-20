@@ -29,6 +29,7 @@ const menuCategory = sequelize.define('menucategory', {
 
 menuCategory.belongsTo(menu, { foreignKey: {name: 'menu_id', allowNull:false}, foreignKeyConstraint: true });
 
+menu.hasMany(menuCategory)
 
 // eslint-disable-next-line
 menuCategory.prototype.toJSON = function () {

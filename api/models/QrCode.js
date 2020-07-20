@@ -18,6 +18,11 @@ const qrcode = sequelize.define('qrcode', {
         type: Sequelize.STRING,
         defaultValue:''
     },
+    name:{
+      type: Sequelize.STRING,
+      unique: 'compositeIndex',
+      allowNull:false
+    },
     status:{
       type:Sequelize.BOOLEAN,
       defaultValue: true
@@ -28,7 +33,9 @@ const qrcode = sequelize.define('qrcode', {
     }
 }, { hooks, tableName });
 
-qrcode.belongsTo(Restaurants, { foreignKey: {name: 'restaurant_id', allowNull:false}, foreignKeyConstraint: true });
+qrcode.belongsTo(Restaurants, { foreignKey: {name: 'restaurant_id', unique: 'compositeIndex', allowNull:false}, foreignKeyConstraint: true });
+
+Restaurants.hasMany(qrcode)
 
 // eslint-disable-next-line
 qrcode.prototype.toJSON = function () {

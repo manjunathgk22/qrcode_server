@@ -23,6 +23,13 @@ const privateRoutes = {
   'GET /menucategory/getcategories': 'MenuCategoryController.getAll',
   'POST /menuitem/create' : 'MenuItemController.create',
   'GET /menuitem/getitem': 'MenuItemController.getAll',
+
+  'POST /service/create' : 'ServiceController.create',
+  'GET /services/getmenus': 'ServiceController.getAll',
+  'POST /servicecategory/create' : 'ServiceCategoryController.create',
+  'GET /servicecategory/getcategories': 'ServiceCategoryController.getAll',
+  'POST /serviceitem/create' : 'ServiceItemController.create',
+  'GET /serviceitem/getitem': 'ServiceItemController.getAll',
   'POST /uploadStatic' : {
     path: 'UploadController.staticUpload',
     middlewares : [upload.single('file')]

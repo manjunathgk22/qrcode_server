@@ -1,28 +1,19 @@
 
-const menuItem = require('../models/MenuItem');
-const multiparty = require('multiparty');
+const ServiceItem = require('../models/ServiceItem');
 
-const MenuItemController = () => {
+const ServiceItemController = () => {
 
     const create = async (req, res) => {
         const { body } = req;
         console.log(body);
 
-        let form = new multiparty.Form();
-
-        // form.parse(req, function(err, fields, files) {
-        //     Object.keys(fields).forEach(function(name) {
-        //         console.log('got field named ' + name);
-        //     });
-        // });
-
-        if(!body.name || !body.cost || !body.menu_category_id) {
+        if(!body.name || !body.cost || !body.service_category_id) {
             return res.status(400).json({ msg: 'Bad Request: name or cost or category id not found' });
         }
         
         try {
-            const response = await menuItem.create({
-                menu_category_id: body.menu_category_id,
+            const response = await ServiceItem.create({
+                service_category_id: body.service_category_id,
                 name: body.name,
                 description: body.description || '',
                 cost : body.cost
@@ -36,9 +27,9 @@ const MenuItemController = () => {
 
     const getAll = async (req, res) => {
         try {
-            const menus = await menuItem.findAll();
+            const services = await ServiceItem.findAll();
             
-            return res.status(200).json({ menus });
+            return res.status(200).json({ services });
         } catch (err) {
             console.log(err);
             return res.status(500).json({ msg: "Internal server error" });
@@ -48,15 +39,15 @@ const MenuItemController = () => {
     const update = async (req, res)=>{
         try {
             const id = req.body.id;
-            const menuitem = await menuItem
+            const serviceItem = await ServiceItem
             .findOne({
                 where: {
                 id,
                 },
             });
-            let obj = {...menuitem, ...req.body}
-            obj.images = [...menuitem.images, ...req.body.images||[]]
-            menuitem.update({
+            let obj = {...serviceItem, ...req.body}
+            obj.images = [...serviceItem.images, ...req.body.images||[]]
+            serviceItem.update({
               ...obj
             })
         } catch (error) {
@@ -71,4 +62,4 @@ const MenuItemController = () => {
     };
 };
 
-module.exports = MenuItemController;
+module.exports = ServiceItemController;

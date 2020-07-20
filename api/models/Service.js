@@ -11,8 +11,8 @@ const hooks = {
   },
 };
 
-const tableName = 'menus';
-const menu = sequelize.define('menu', {
+const tableName = 'services';
+const service = sequelize.define('service', {
     status:{
         type:Sequelize.BOOLEAN,
         defaultValue: true
@@ -20,16 +20,16 @@ const menu = sequelize.define('menu', {
 }, { hooks, tableName });
 
 
-menu.belongsTo(Qrcode, { foreignKey: {name: 'qrcode_id', allowNull:false}, foreignKeyConstraint: true });
+service.belongsTo(Qrcode, { foreignKey: {name: 'qrcode_id', allowNull:false}, foreignKeyConstraint: true });
 
-Qrcode.hasOne(menu)
+Qrcode.hasOne(service)
 
 
 // eslint-disable-next-line
-menu.prototype.toJSON = function () {
+service.prototype.toJSON = function () {
   const values = Object.assign({}, this.get());
 
   return values;
 };
 
-module.exports = menu;
+module.exports = service;

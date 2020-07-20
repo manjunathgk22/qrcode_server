@@ -29,6 +29,7 @@ const bill = sequelize.define('bill', {
 
 bill.belongsTo(Qrcode, { foreignKey: {name: 'qrcode_id', allowNull:false}, foreignKeyConstraint: true });
 
+Qrcode.hasOne(bill)
 
 // eslint-disable-next-line
 bill.prototype.toJSON = function () {

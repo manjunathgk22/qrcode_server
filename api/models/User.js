@@ -2,6 +2,7 @@ const Sequelize = require('sequelize');
 const bcryptService = require('../services/bcrypt.service');
 const Restaurants = require('../models/Restaurant');
 const sequelize = require('../../config/database');
+const QrCode = require('../models/QrCode');
 
 const hooks = {
   beforeCreate(user) {
@@ -30,6 +31,7 @@ User.prototype.toJSON = function () {
   return values;
 };
 User.belongsTo(Restaurants, { foreignKey: {name: 'restaurant_id', allowNull:false}, foreignKeyConstraint: true });
-// Restaurants.hasOne(User, { foreignKey : {name: 'id'}})
+Restaurants.hasOne(User)
+Restaurants.hasMany(QrCode)
 // User.belongsTo(Restaurants);
 module.exports = User;

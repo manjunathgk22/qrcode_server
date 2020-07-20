@@ -1,7 +1,9 @@
 
 const Sequelize = require('sequelize');
+const Restaurants = require('./Restaurant');
 const sequelize = require('../../config/database');
-const menuCategory = require('./MenuCategory');
+const Qrcode = require('./QrCode');
+const service = require('./Service');
 
 const hooks = {
   beforeCreate() {
@@ -9,8 +11,8 @@ const hooks = {
   },
 };
 
-const tableName = 'menuitems';
-const menuItem = sequelize.define('menuitem', {
+const tableName = 'service_category';
+const serviceCategory = sequelize.define('servicecategory', {
     status:{
         type:Sequelize.BOOLEAN,
         defaultValue: true
@@ -21,26 +23,18 @@ const menuItem = sequelize.define('menuitem', {
     description:{
         type:Sequelize.STRING,
         defaultValue:''
-    },
-    images:{
-        type: Sequelize.ARRAY(Sequelize.STRING),
-        defaultValue: []
-    },
-    cost:{
-        type:Sequelize.FLOAT
-    } 
+    }
 }, { hooks, tableName });
 
 
-menuItem.belongsTo(menuCategory, { foreignKey: {name: 'menu_category_id', allowNull:false}, foreignKeyConstraint: true });
+serviceCategory.belongsTo(service, { foreignKey: {name: 'service_id', allowNull:false}, foreignKeyConstraint: true });
 
-menuCategory.hasMany(menuItem)
-
+service.hasMany(serviceCategory)
 
 // eslint-disable-next-line
-menuItem.prototype.toJSON = function () {
+serviceCategory.prototype.toJSON = function () {
   const values = Object.assign({}, this.get());
   return values;
 };
 
-module.exports = menuItem;
+module.exports = serviceCategory;
