@@ -10,7 +10,7 @@ const UserController = () => {
     if (body.password === body.password2) {
       try {
         const user = await User.create({
-          email: body.email,
+          username: body.username,
           password: body.password,
           restaurant_id: body.restaurant_id,
         });
@@ -27,14 +27,14 @@ const UserController = () => {
   };
 
   const login = async (req, res) => {
-    const { email, password } = req.body;
+    const { username, password } = req.body;
 
-    if (email && password) {
+    if (username && password) {
       try {
         const user = await User
           .findOne({
             where: {
-              email,
+              username,
             },
           });
 
@@ -55,7 +55,7 @@ const UserController = () => {
       }
     }
 
-    return res.status(400).json({ msg: 'Bad Request: Email or password is wrong' });
+    return res.status(400).json({ msg: 'Bad Request: username or password is wrong' });
   };
 
   const validate = (req, res) => {

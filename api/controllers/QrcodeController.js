@@ -10,6 +10,8 @@ const menu = require('../models/Menu');
 const Service = require('../models/Service')
 const Sequelize = require('sequelize');
 const service = require('../models/Service');
+const pdfGenerator = require('../../utils/pdfgenerator')
+const Restaurant = require('../models/Restaurant')
 const Op = Sequelize.Op;
 
 const QrcodeController = () => {
@@ -40,9 +42,39 @@ const QrcodeController = () => {
                 restaurant_id: user.restaurant_id,
                 canonicalname: body.canonicalname
             });
-            
-            response.dataValues.datacode  = await QRCode.toDataURL(response.code)
-            return res.status(200).json({ response });
+            const restaurant = await Restaurant.findOne({
+                id:user.restaurant_id
+            })
+            const datacode  = await QRCode.toDataURL(response.code)
+            response.pdf = await pdfGenerator({
+                pageMargins: [10, 10, 10, 10],
+                content: [
+                    {
+                        text: restaurant.dataValues.name,
+                        alignment:'center',
+                        fontSize:22,
+                        bold: true,
+                        font : 'Roboto',
+                        margin: [0, 0, 20, 0 ]
+                    },
+                    {
+                        text:body.name,
+                        fontSize:18,
+                        alignment:'center'
+                    },
+                    {
+                        image: datacode,
+                        width: 200,
+                        alignment:'center',
+                        margin: [0, 0, 20, 0 ]
+                    },
+                    
+                ],
+            })
+            return res.status(200).json({ data:{
+                ...response.dataValues,
+                pdf:response.pdf.data
+            } });
         } catch (err) {
             console.log(err);
             return res.status(500).json({ msg: "Internal server error " + (err.original? err.original.detail: '') });
@@ -52,8 +84,6 @@ const QrcodeController = () => {
     const getAll = async (req, res) => {
         try {
             const qrcodes = await Qrcode.findAll();
-            
-
             return res.status(200).json({ qrcodes });
         } catch (err) {
             console.log(err);
@@ -70,19 +100,7 @@ const QrcodeController = () => {
             const {id} = await  menu.findOne({
                 where:{qrcode_id: req.body.id}
             })
-            // const response = await menuItem.findAll({
-            //     include:[{
-            //         model: menuCategory,
-            //         required:true,
-            //         include: [
-            //             {model:menu,
-            //             resquired:true,
-            //             where: {id}
-            //             }
-            //         ]  
-            //     }]
-            // })
-
+            
             const response = await menuCategory.findAll({
                 where : {menu_id: id},
                 include:[{

@@ -13,7 +13,13 @@ const hooks = {
 const tableName = 'users';
 
 const User = sequelize.define('User', {
-  email: {
+  id:{
+    type: Sequelize.INTEGER,
+    autoIncrement: true,
+    primaryKey: true,
+    initialAutoIncrement: 1000
+  },
+  username: {
     type: Sequelize.STRING,
     unique: true,
   },

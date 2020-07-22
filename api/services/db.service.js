@@ -34,11 +34,23 @@ const dbService = (environment, migrate) => {
       // await dropDB();
       await syncDB();
       successfulDBStart();
+      adjustSequence()
     } catch (err) {
       errorDBStart(err);
     }
   };
 
+  const adjustSequence = async()=>{
+    await database.query(
+      `ALTER SEQUENCE "restaurants_id_seq" RESTART WITH 1000;`
+    );
+    await database.query(
+      `ALTER SEQUENCE "users_id_seq" RESTART WITH 1000;`
+    );
+    await database.query(
+      `ALTER SEQUENCE "qrcodes_id_seq" RESTART WITH 1000;`
+    );
+  }
   const startDev = async () => {
     try {
       await authenticateDB();

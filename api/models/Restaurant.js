@@ -16,6 +16,9 @@ const restaurant = sequelize.define('restaurant', {
   address: {
     type: Sequelize.STRING,
   },
+  logo: {
+    type: Sequelize.STRING
+  },
   images: {
     type: Sequelize.ARRAY(Sequelize.STRING),
     defaultValue: []

@@ -13,6 +13,12 @@ const hooks = {
 
 const tableName = 'bills';
 const bill = sequelize.define('bill', {
+  id:{
+    type: Sequelize.INTEGER,
+    autoIncrement: true,
+    primaryKey: true,
+    initialAutoIncrement: 1000
+  },
     discount:{
         type: Sequelize.INTEGER,
         defaultValue: 0

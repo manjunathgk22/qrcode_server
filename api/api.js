@@ -11,6 +11,7 @@ const cors = require('cors');
 var multer  = require('multer')
 console.log('dir path', __dirname)
 
+// LOCAL IMAGE PROCESSING
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, path.join(__dirname, '../uploads'))
@@ -53,22 +54,14 @@ app.use(helmet({
 
 // parsing the request bodys
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
-
+app.use(bodyParser.json({ limit: '50mb' }));
 
 // secure your private routes with jwt authentication middleware
-
-
 app.all('/private/*', (req, res, next) => auth(req, res, next));
 
-app.post('/upload/*', upload.single('file'), function (req, res, next) {
-  const file = req.file
-  // req.file is the `avatar` file
-  // req.body will hold the text fields, if there were any
-  res.sendStatus(200)
-})
-
+// SERVE STATIC FILES
 app.use(express.static('uploads'))
+
 // fill routes for express application
 app.use('/public', mappedOpenRoutes);
 app.use('/private', mappedAuthRoutes);
@@ -83,3 +76,5 @@ server.listen(config.port, () => {
   }
   return DB;
 });
+
+

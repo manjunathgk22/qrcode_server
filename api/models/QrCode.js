@@ -11,6 +11,12 @@ const hooks = {
 
 const tableName = 'qrcodes';
 const qrcode = sequelize.define('qrcode', {
+  id:{
+    type: Sequelize.INTEGER,
+    autoIncrement: true,
+    primaryKey: true,
+    initialAutoIncrement: 1000
+  },
     code: {
         type: Sequelize.UUID,
     },
