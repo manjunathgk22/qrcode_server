@@ -8,14 +8,6 @@ const MenuItemController = () => {
         const { body } = req;
         console.log(body);
 
-        let form = new multiparty.Form();
-
-        // form.parse(req, function(err, fields, files) {
-        //     Object.keys(fields).forEach(function(name) {
-        //         console.log('got field named ' + name);
-        //     });
-        // });
-
         if(!body.name || !body.cost || !body.menu_category_id) {
             return res.status(400).json({ msg: 'Bad Request: name or cost or category id not found' });
         }
@@ -25,7 +17,8 @@ const MenuItemController = () => {
                 menu_category_id: body.menu_category_id,
                 name: body.name,
                 description: body.description || '',
-                cost : body.cost
+                cost : body.cost,
+                images: body.images|| []
             });
             return res.status(200).json({ response });
         } catch (err) {

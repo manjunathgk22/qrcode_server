@@ -8,7 +8,7 @@ const MenuCategoryController = () => {
         console.log(body);
 
         if(!body.name || !body.menu_id) {
-            return res.status(400).json({ msg: 'Bad Request: qrcode id not found' });
+            return res.status(400).json({ msg: 'Bad Request: menuid or name  not found' });
         }
         
         try {

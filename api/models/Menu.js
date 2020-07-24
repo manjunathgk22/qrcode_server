@@ -16,6 +16,9 @@ const menu = sequelize.define('menu', {
     status:{
         type:Sequelize.BOOLEAN,
         defaultValue: true
+    },
+    name:{
+      type:Sequelize.STRING
     }
 }, { hooks, tableName });
 

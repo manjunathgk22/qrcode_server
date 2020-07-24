@@ -14,11 +14,13 @@ var storage = multer.diskStorage({
 var upload = multer({ storage: storage })
 
 const privateRoutes = {
+  'GET /restaurant/getrestaurant': 'RestaurantController.getSingleRestaurant',
+  'PUT /restaurant/update' : 'RestaurantController.update',
   'GET /users': 'UserController.getAll',
   'POST /qrcode/generate' : 'QrcodeController.create',
-  'GET /qrcodes': 'QrcodeController.getAll',
+  'GET /qrcode/getqrcodes': 'QrcodeController.getAll',
   'POST /menu/create' : 'MenuController.create',
-  'GET /menus/getmenus': 'MenuController.getAll',
+  'GET /menus/getmenus': 'MenuController.getMenus',
   'POST /menucategory/create' : 'MenuCategoryController.create',
   'GET /menucategory/getcategories': 'MenuCategoryController.getAll',
   'POST /menuitem/create' : 'MenuItemController.create',

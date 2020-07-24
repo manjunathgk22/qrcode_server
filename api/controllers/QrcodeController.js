@@ -17,12 +17,15 @@ const Op = Sequelize.Op;
 const QrcodeController = () => {
     const create = async (req, res) => {
         const { body } = req;
+        let result = [];
+        let content = []
         console.log(body);
 
         if(!body.name){
             return res.status(400).json({msg: 'Bad Request name not present'})
         }
 
+        // FIND USER
         const userId = req.token && req.token.id;
         const user = await User
         .findOne({
@@ -35,45 +38,61 @@ const QrcodeController = () => {
             return res.status(400).json({ msg: 'Bad Request: RestaurantId not found' });
         }
         
+        // GET restaurant details
+        const restaurant = await Restaurant.findOne({
+            id:user.restaurant_id
+        })
+
         try {
-            const response = await Qrcode.create({
-                code: uuidv4(),
-                name:body.name,
-                restaurant_id: user.restaurant_id,
-                canonicalname: body.canonicalname
-            });
-            const restaurant = await Restaurant.findOne({
-                id:user.restaurant_id
+            
+            // Normalise Name
+            const nameResponse = await Qrcode.findAll({
+                where:{
+                    name: { [Op.like]: `%${body.name}%`},
+                    restaurant_id:user.restaurant_id,
+                }
             })
-            const datacode  = await QRCode.toDataURL(response.code)
-            response.pdf = await pdfGenerator({
+
+            for(let i = nameResponse.length+1 ,j=0; j<body.numberOfqrcodes;j++, i++ ){
+                // CREATE QRCODES
+                const response = await Qrcode.create({
+                    code: uuidv4(),
+                    name:body.name + i,
+                    restaurant_id: user.restaurant_id,
+                    canonicalname: body.canonicalname || ''
+                });
+                
+                const datacode  = await QRCode.toDataURL(response.code)
+                
+                content.push({
+                    text: restaurant.dataValues.name,
+                    alignment:'center',
+                    fontSize:22,
+                    bold: true,
+                    font : 'Roboto',
+                    margin: [0, 0, 20, 0 ]
+                },
+                {
+                    text:body.name + i,
+                    fontSize:18,
+                    alignment:'center'
+                },
+                {
+                    image: datacode,
+                    width: 300,
+                    alignment:'center',
+                    margin: [0, 0, 20, 0 ]
+                },)
+                result.push(response)
+            }
+            
+            const pdf = await pdfGenerator({
                 pageMargins: [10, 10, 10, 10],
-                content: [
-                    {
-                        text: restaurant.dataValues.name,
-                        alignment:'center',
-                        fontSize:22,
-                        bold: true,
-                        font : 'Roboto',
-                        margin: [0, 0, 20, 0 ]
-                    },
-                    {
-                        text:body.name,
-                        fontSize:18,
-                        alignment:'center'
-                    },
-                    {
-                        image: datacode,
-                        width: 200,
-                        alignment:'center',
-                        margin: [0, 0, 20, 0 ]
-                    },
-                    
-                ],
+                content: content,
             })
             return res.status(200).json({ data:{
-                ...response.dataValues,
-                pdf:response.pdf.data
+                result,
+                pdf
             } });
         } catch (err) {
             console.log(err);
@@ -83,7 +102,23 @@ const QrcodeController = () => {
 
     const getAll = async (req, res) => {
         try {
-            const qrcodes = await Qrcode.findAll();
+            const userId = req.token && req.token.id;
+            const user = await User
+            .findOne({
+                where: {
+                id:userId,
+                },
+            });
+            
+            if(!user.restaurant_id){
+                return res.status(400).json({ msg: 'Bad Request: RestaurantId not found' });
+            }
+
+            const qrcodes = await Qrcode.findAll({
+                where: {
+                    restaurant_id: user.restaurant_id
+                }
+            });
             return res.status(200).json({ qrcodes });
         } catch (err) {
             console.log(err);

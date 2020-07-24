@@ -34,7 +34,7 @@ const dbService = (environment, migrate) => {
       // await dropDB();
       await syncDB();
       successfulDBStart();
-      adjustSequence()
+      // adjustSequence()
     } catch (err) {
       errorDBStart(err);
     }
