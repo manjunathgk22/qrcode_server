@@ -28,6 +28,7 @@ var upload = multer({ storage: storage })
 const config = require('../config/');
 const dbService = require('./services/db.service');
 const auth = require('./policies/auth.policy');
+const generate = require('../pdf/pdf');
 
 // environment: development, staging, testing, production
 const environment = process.env.NODE_ENV;
@@ -55,6 +56,12 @@ app.use(helmet({
 // parsing the request bodys
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json({ limit: '50mb' }));
+
+// app.get('/', async function (req, res) {
+//   const pdf = await generate()
+//   // res.contentType("application/pdf");
+//   return res.status(200).json({pdf: `data:application/pdf;base64,${pdf}`});
+// });
 
 // secure your private routes with jwt authentication middleware
 app.all('/private/*', (req, res, next) => auth(req, res, next));
