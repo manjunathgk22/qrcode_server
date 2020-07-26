@@ -1,9 +1,9 @@
 
 const Sequelize = require('sequelize');
-const Restaurants = require('../models/Restaurant');
+
 const sequelize = require('../../config/database');
-const Qrcode = require('./QrCode');
-const menuCategory = require('./MenuCategory');
+const restaurant = require('./Restaurant');
+
 
 const hooks = {
   beforeCreate() {
@@ -23,9 +23,10 @@ const menu = sequelize.define('menu', {
 }, { hooks, tableName });
 
 
-menu.belongsTo(Qrcode, { foreignKey: {name: 'qrcode_id', allowNull:false}, foreignKeyConstraint: true });
+menu.belongsTo(restaurant, { foreignKey: {name: 'restaurant_id', allowNull:false}, foreignKeyConstraint: true });
 
-Qrcode.hasOne(menu)
+// Qrcode.hasOne(menu)
+restaurant.hasMany(menu)
 
 
 // eslint-disable-next-line

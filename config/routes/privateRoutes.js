@@ -20,10 +20,13 @@ const privateRoutes = {
   'POST /qrcode/generate' : 'QrcodeController.create',
   'GET /qrcode/getqrcodes': 'QrcodeController.getAll',
   'POST /menu/create' : 'MenuController.create',
+  'PUT /menu/update' : 'MenuController.update',
   'GET /menus/getmenus': 'MenuController.getMenus',
   'POST /menucategory/create' : 'MenuCategoryController.create',
+  'PUT /menucategory/update' : 'MenuCategoryController.update',
   'GET /menucategory/getcategories': 'MenuCategoryController.getAll',
   'POST /menuitem/create' : 'MenuItemController.create',
+  'PUT /menuitem/update' : 'MenuItemController.update',
   'GET /menuitem/getitem': 'MenuItemController.getAll',
 
   'POST /service/create' : 'ServiceController.create',

@@ -56,6 +56,7 @@ const RestaurantController = () => {
         delete req.body.id;
         let obj = {...restaurant, ...req.body}
         obj.images = [...restaurant.images, ...req.body.images||[]]
+        obj.images = obj.images.filter(img => img);
         const response =  await restaurant.update({
           ...obj
         })

@@ -47,12 +47,17 @@ const MenuItemController = () => {
                 id,
                 },
             });
+            if(req.body.id){
+                delete req.body.id;
+            }
             let obj = {...menuitem, ...req.body}
             obj.images = [...menuitem.images, ...req.body.images||[]]
-            menuitem.update({
-              ...obj
+            const response =  await menuitem.update({
+                ...obj
             })
+            return res.status(200).json({response})
         } catch (error) {
+            console.log(error)
           return res.status(500).json({msg:'Internal server error'})
         }
       }

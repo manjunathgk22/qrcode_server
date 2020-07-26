@@ -1,0 +1,92 @@
+<style>
+    @font-face {
+    font-family: 'Roboto';
+    src: url('../fonts/Roboto-Black.ttf')  format('truetype'), /* Safari, Android, iOS */
+        
+}
+body {
+  font-family: 'Roboto', Fallback, sans-serif;
+}
+    .invoice-box table {
+        width: 100%;
+        line-height: inherit;
+        text-align: left;
+    }
+    .center{
+        text-align: center;
+    }
+    .wrapper{
+        border: 2px solid #0cb88f;
+        padding: 10px;
+        padding-top: 5px;
+    }
+    .parent-wrapper  {
+        border-collapse: separate;
+        border-spacing: 40px 15px;
+    }
+    .title{
+        font-weight: 600;
+    }
+    img{
+        width: auto;
+        height: 300px;
+    }
+    .brand{
+        color: #fd3753;
+        font-size: 20px;
+        padding-bottom: 15px;
+    }
+    .small-text{
+        font-size: 13px;
+        color: #787878;
+    }
+    .bold{
+        font-weight: 600;
+    }
+</style>
+
+<div>
+    <div class="invoice-box">
+        <table class="parent-wrapper">
+            <tr class="row-wrapper">
+                <td>
+                    {{#each items }}
+                        {{#if_even @index}}
+                            <tr style="padding-bottom:100px"></tr>
+                        {{/if_even}}
+                            <td>
+                                <table class="wrapper">
+                                    <tr>
+                                        <td class="center title">
+                                            {{name}}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="center">
+                                            {{name1}}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="center">
+                                            <img src={{qrcode}}> 
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="center title brand">
+                                            {{id}}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="center small-text">
+                                            {{text}}<span class="bold" style="text-decoration: underline;">http://localhost:2017</span> and enter <span class="bold">{{id}}</span> 
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                    {{/each}}
+                </td>
+            </tr>
+        </table>
+        
+    </div>
+</div>

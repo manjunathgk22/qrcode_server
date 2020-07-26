@@ -3,6 +3,8 @@ const Sequelize = require('sequelize');
 const Restaurants = require('../models/Restaurant');
 const sequelize = require('../../config/database');
 const menu = require('./Menu');
+const service = require('./Service')
+// const menu = require('./Menu');
 
 const hooks = {
   beforeCreate() {
@@ -36,9 +38,12 @@ const qrcode = sequelize.define('qrcode', {
 }, { hooks, tableName });
 
 qrcode.belongsTo(Restaurants, { foreignKey: {name: 'restaurant_id', unique: 'compositeIndex', allowNull:false}, foreignKeyConstraint: true });
+qrcode.belongsTo(menu, {foreignKey: {name: 'menu_id'}})
+qrcode.belongsTo(service, {foreignKey: {name: 'service_id'}})
 
 Restaurants.hasMany(qrcode)
-// menu.hasMany(qrcode)
+menu.hasMany(qrcode);
+service.hasMany(qrcode);
 
 // eslint-disable-next-line
 qrcode.prototype.toJSON = function () {

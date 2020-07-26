@@ -20,9 +20,11 @@ const service = sequelize.define('service', {
 }, { hooks, tableName });
 
 
-service.belongsTo(Qrcode, { foreignKey: {name: 'qrcode_id', allowNull:false}, foreignKeyConstraint: true });
+service.belongsTo(Restaurants, { foreignKey: {name: 'restaurant_id', allowNull:false}, foreignKeyConstraint: true });
 
-Qrcode.hasOne(service)
+// Qrcode.hasOne(service)
+Restaurants.hasMany(service)
+
 
 
 // eslint-disable-next-line

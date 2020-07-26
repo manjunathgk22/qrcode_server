@@ -36,7 +36,7 @@ User.prototype.toJSON = function () {
 
   return values;
 };
-User.belongsTo(Restaurants, { foreignKey: {name: 'restaurant_id', allowNull:false}, foreignKeyConstraint: true });
+User.belongsTo(Restaurants, { foreignKey: {name: 'restaurant_id'}, foreignKeyConstraint: true });
 Restaurants.hasOne(User)
 Restaurants.hasMany(QrCode)
 // User.belongsTo(Restaurants);

@@ -31,10 +31,10 @@ const dbService = (environment, migrate) => {
 
   const startMigrateFalse = async () => {
     try {
-      // await dropDB();
+      // await dropDB(); //RUN ONLY ON INIT DB
       await syncDB();
       successfulDBStart();
-      // adjustSequence()
+      // adjustSequence() //RUN ONLY ON INIT DB
     } catch (err) {
       errorDBStart(err);
     }
